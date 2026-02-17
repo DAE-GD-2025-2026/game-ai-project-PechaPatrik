@@ -223,12 +223,11 @@ void ALevel_SteeringBehaviors::SetAgentBehavior(ImGui_Agent& Agent)
 {
 	Agent.Behavior.reset();
 	
-	switch (static_cast<BehaviorTypes>(Agent.SelectedBehavior))
-	{
-	//TODO; Implement behaviors setting here
-	default:
-		assert(false); // Incorrect Agent Behavior gotten during SetAgentBehavior()	
-	}
+	//switch (static_cast<BehaviorTypes>(Agent.SelectedBehavior))
+	//{
+	//default:
+	//	assert(false); // Incorrect Agent Behavior gotten during SetAgentBehavior()	
+	//}
 
 	UpdateTarget(Agent);
 	
@@ -248,12 +247,25 @@ void ALevel_SteeringBehaviors::RefreshTargetLabels()
 
 void ALevel_SteeringBehaviors::UpdateTarget(ImGui_Agent& Agent)
 {
-	// Note: MouseTarget position is updated via Level BP every click
+	if (!Agent.Behavior)
+	{
+		return;
+	}
 	
 	bool const bUseMouseAsTarget = Agent.SelectedTarget < 0;
 	if (!bUseMouseAsTarget)
 	{
+		if (Agent.SelectedTarget >= SteeringAgents.size())
+		{
+			return;
+		}
+
 		ASteeringAgent* const TargetAgent = SteeringAgents[Agent.SelectedTarget].Agent;
+
+		if (!IsValid(TargetAgent))
+		{
+			return;
+		}
 
 		FTargetData Target;
 		Target.Position = TargetAgent->GetPosition();
