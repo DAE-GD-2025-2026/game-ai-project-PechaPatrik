@@ -33,11 +33,12 @@ private:
 	enum class BehaviorTypes
 	{
 		Seek,
-		Wander,
 		Flee,
 		Arrive,
-		Evade,
+		Face,
 		Pursuit,
+		Evade,
+		Wander,
 
 		// @ End
 		Count
