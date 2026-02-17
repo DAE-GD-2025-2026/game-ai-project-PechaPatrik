@@ -42,3 +42,20 @@ public:
 
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
 };
+
+class Arrive : public ISteeringBehavior
+{
+public:
+	Arrive() = default;
+	virtual ~Arrive() override = default;
+
+	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
+
+	void SetSlowRadius(float InRadius) { SlowRadius = InRadius; }
+	void SetTargetRadius(float InRadius) { TargetRadius = InRadius; }
+
+private:
+	float SlowRadius{ 500.0f };
+	float TargetRadius{ 50.0f };
+	float OriginalMaxSpeed{ 0.0f };
+};
