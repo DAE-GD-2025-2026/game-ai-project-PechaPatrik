@@ -55,7 +55,7 @@ void ALevel_Flocking::Tick(float DeltaTime)
 	{
 		DrawDebugPoint(GetWorld(),
 			FVector{ pAgentToEvade->GetPosition(), 0.f },
-			20.f, FColor::Red);
+			30.f, FColor::Red);
 	}
 }
 
