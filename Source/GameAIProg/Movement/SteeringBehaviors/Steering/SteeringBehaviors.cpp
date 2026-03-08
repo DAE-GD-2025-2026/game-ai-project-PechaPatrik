@@ -68,3 +68,31 @@ SteeringOutput Arrive::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 
 	return Output;
 }
+
+SteeringOutput Face::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
+{
+	SteeringOutput Output{};
+	Output.LinearVelocity = Agent.GetLinearVelocity();
+
+	const FVector2D DirectionToTarget{ Target.Position - Agent.GetPosition() };
+
+	if (!DirectionToTarget.IsZero())
+	{
+		const float DesiredOrientation = FMath::Atan2(DirectionToTarget.Y, DirectionToTarget.X);
+		const float CurrentOrientation{ FMath::DegreesToRadians(Agent.GetRotation()) };
+
+		float AngleDifference{ DesiredOrientation - CurrentOrientation };
+
+		AngleDifference = FMath::Fmod(AngleDifference + PI, 2.0f * PI);
+		if (AngleDifference < 0.0f)
+		{
+			AngleDifference += 2.0f * PI;
+		}
+		AngleDifference -= PI;
+
+		const float MaxAngularSpeed{ FMath::DegreesToRadians(Agent.GetMaxAngularSpeed()) };
+		Output.AngularVelocity = FMath::Clamp(AngleDifference / DeltaTime, -MaxAngularSpeed, MaxAngularSpeed);
+	}
+
+	return Output;
+}

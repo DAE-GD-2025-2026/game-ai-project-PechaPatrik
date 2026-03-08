@@ -59,3 +59,12 @@ private:
 	float TargetRadius{ 50.0f };
 	float OriginalMaxSpeed{ 0.0f };
 };
+
+class Face : public ISteeringBehavior
+{
+public:
+	Face() = default;
+	virtual ~Face() override = default;
+
+	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
+};
