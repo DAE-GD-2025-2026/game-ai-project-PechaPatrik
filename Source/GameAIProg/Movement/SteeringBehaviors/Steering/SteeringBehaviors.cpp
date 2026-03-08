@@ -16,16 +16,16 @@ SteeringOutput Seek::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 	// Debug rendering
 	if (Agent.GetDebugRenderingEnabled())
 	{
-		UWorld* World = Agent.GetWorld();
+		UWorld* pWorld = Agent.GetWorld();
 
 		// Draw line from agent to target
-		DrawDebugLine(World,
+		DrawDebugLine(pWorld,
 			FVector{ Agent.GetPosition(), 0.0f },
 			FVector{ Target.Position, 0.0f },
 			FColor::Green);
 
 		// Draw target point
-		DrawDebugPoint(World,
+		DrawDebugPoint(pWorld,
 			FVector{ Target.Position, 0.0f },
 			10.0f,
 			FColor::Green);
@@ -49,16 +49,16 @@ SteeringOutput Flee::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 	// Debug rendering
 	if (Agent.GetDebugRenderingEnabled())
 	{
-		UWorld* World = Agent.GetWorld();
+		UWorld* pWorld = Agent.GetWorld();
 
 		// Draw line from target to agent
-		DrawDebugLine(World,
+		DrawDebugLine(pWorld,
 			FVector{ Target.Position, 0.0f },
 			FVector{ Agent.GetPosition(), 0.0f },
 			FColor::Red);
 
 		// Draw target point
-		DrawDebugPoint(World,
+		DrawDebugPoint(pWorld,
 			FVector{ Target.Position, 0.0f },
 			10.0f,
 			FColor::Red);
@@ -78,11 +78,11 @@ SteeringOutput Arrive::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 
 	if (Agent.GetDebugRenderingEnabled())
 	{
-		UWorld* World = Agent.GetWorld();
+		UWorld* pWorld = Agent.GetWorld();
 		const FVector Target3D{ Target.Position, 0.0f };
 
 		// Draw outer circle
-		DrawDebugCircle(World,
+		DrawDebugCircle(pWorld,
 			Target3D,
 			SlowRadius,
 			16,
@@ -95,7 +95,7 @@ SteeringOutput Arrive::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 			FVector(0, 1, 0));
 
 		// Draw inner circle
-		DrawDebugCircle(World,
+		DrawDebugCircle(pWorld,
 			Target3D,
 			TargetRadius,
 			16,
@@ -118,7 +118,7 @@ SteeringOutput Arrive::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 			LineColor = FColor::Yellow; // Slowing down
 		}
 
-		DrawDebugLine(World,
+		DrawDebugLine(pWorld,
 			FVector{ Agent.GetPosition(), 0.0f },
 			Target3D,
 			LineColor);
@@ -174,14 +174,14 @@ SteeringOutput Face::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 
 	if (Agent.GetDebugRenderingEnabled())
 	{
-		UWorld* World = Agent.GetWorld();
+		UWorld* pWorld = Agent.GetWorld();
 
 		// Draw current forward direction (blue)
 		const float CurrentRotationRad{ FMath::DegreesToRadians(Agent.GetRotation()) };
 		const FVector2D CurrentForward{ FMath::Cos(CurrentRotationRad), FMath::Sin(CurrentRotationRad) };
 		const FVector2D CurrentForwardEnd{ Agent.GetPosition() + (CurrentForward * 100.0f) };
 
-		DrawDebugLine(World,
+		DrawDebugLine(pWorld,
 			FVector{ Agent.GetPosition(), 0.0f },
 			FVector{ CurrentForwardEnd, 0.0f },
 			FColor::Blue);
@@ -192,14 +192,14 @@ SteeringOutput Face::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 			const FVector2D DesiredForward{ DirectionToTarget.GetSafeNormal() };
 			const FVector2D DesiredForwardEnd{ Agent.GetPosition() + (DesiredForward * 100.0f) };
 
-			DrawDebugLine(World,
+			DrawDebugLine(pWorld,
 				FVector{ Agent.GetPosition(), 0.0f },
 				FVector{ DesiredForwardEnd, 0.0f },
 				FColor::Green);
 		}
 
 		// Draw target point
-		DrawDebugPoint(World,
+		DrawDebugPoint(pWorld,
 			FVector{ Target.Position, 0.0f },
 			10.0f,
 			FColor::Green);
@@ -311,10 +311,10 @@ SteeringOutput Wander::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 	// Debug rendering
 	if (Agent.GetDebugRenderingEnabled())
 	{
-		UWorld* World = Agent.GetWorld();
+		UWorld* pWorld = Agent.GetWorld();
 
 		// Draw the wander circle
-		DrawDebugCircle(World,
+		DrawDebugCircle(pWorld,
 			FVector{ CircleCenter, 0.0f },
 			WanderRadius,
 			32,
@@ -327,19 +327,19 @@ SteeringOutput Wander::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 			FVector(0, 1, 0));
 
 		// Draw line from agent to circle center
-		DrawDebugLine(World,
+		DrawDebugLine(pWorld,
 			FVector{ Agent.GetPosition(), 0.0f },
 			FVector{ CircleCenter, 0.0f },
 			FColor::Magenta);
 
 		// Draw line from agent to wander target
-		DrawDebugLine(World,
+		DrawDebugLine(pWorld,
 			FVector{ Agent.GetPosition(), 0.0f },
 			FVector{ Target.Position, 0.0f },
 			FColor::Green);
 
 		// Draw the target point
-		DrawDebugPoint(World,
+		DrawDebugPoint(pWorld,
 			FVector{ Target.Position, 0.0f },
 			10.0f,
 			FColor::Green);
