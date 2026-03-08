@@ -74,3 +74,19 @@ class Evade : public TargetingBehavior
 public:
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
 };
+
+class Wander : public Seek
+{
+public:
+	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
+
+	void SetWanderOffset(float InOffset) { WanderOffset = InOffset; }
+	void SetWanderRadius(float InRadius) { WanderRadius = InRadius; }
+	void SetMaxAngleChange(float InRadians) { MaxAngleChange = InRadians; }
+
+private:
+	float WanderOffset{ 120.0f };
+	float WanderRadius{ 60.0f };
+	float MaxAngleChange{ FMath::DegreesToRadians(45.0f) };
+	float WanderAngle{ 0.0f };
+};

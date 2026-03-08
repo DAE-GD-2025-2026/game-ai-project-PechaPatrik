@@ -100,7 +100,9 @@ SteeringOutput Arrive::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 			TargetRadius,
 			16,
 			FColor::Red,
-			false, -1.f, 0,
+			false, 
+			-1.f, 
+			0,
 			0.f,
 			FVector(1, 0, 0),
 			FVector(0, 1, 0));
@@ -288,4 +290,60 @@ SteeringOutput Evade::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 	}
 
 	return Output;
+}
+
+SteeringOutput Wander::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
+{
+	const float RandomAngle{ FMath::RandRange(-MaxAngleChange, MaxAngleChange) };
+	WanderAngle += RandomAngle;
+	WanderAngle = FMath::Fmod(WanderAngle, 2.0f * PI);
+    if (WanderAngle < 0.0f) WanderAngle += 2.0f * PI;
+
+	const float AgentRotationRadians{ FMath::DegreesToRadians(Agent.GetRotation()) };
+	const FVector2D AgentForward{ FMath::Cos(AgentRotationRadians), FMath::Sin(AgentRotationRadians) };
+	const FVector2D CircleCenter{ Agent.GetPosition() + (AgentForward * WanderOffset) };
+	const FVector2D CirclePoint{ FMath::Cos(WanderAngle), FMath::Sin(WanderAngle) };
+	const FVector2D ScaledCirclePoint{ CirclePoint * WanderRadius };
+
+	// Set target to circle point and seek to it
+	Target.Position = CircleCenter + ScaledCirclePoint;
+
+	// Debug rendering
+	if (Agent.GetDebugRenderingEnabled())
+	{
+		UWorld* World = Agent.GetWorld();
+
+		// Draw the wander circle
+		DrawDebugCircle(World,
+			FVector{ CircleCenter, 0.0f },
+			WanderRadius,
+			32,
+			FColor::Blue,
+			false,
+			-1.f,
+			0,
+			0.f,
+			FVector(1, 0, 0),
+			FVector(0, 1, 0));
+
+		// Draw line from agent to circle center
+		DrawDebugLine(World,
+			FVector{ Agent.GetPosition(), 0.0f },
+			FVector{ CircleCenter, 0.0f },
+			FColor::Magenta);
+
+		// Draw line from agent to wander target
+		DrawDebugLine(World,
+			FVector{ Agent.GetPosition(), 0.0f },
+			FVector{ Target.Position, 0.0f },
+			FColor::Green);
+
+		// Draw the target point
+		DrawDebugPoint(World,
+			FVector{ Target.Position, 0.0f },
+			10.0f,
+			FColor::Green);
+	}
+
+	return Seek::CalculateSteering(DeltaTime, Agent);
 }
