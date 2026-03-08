@@ -28,27 +28,18 @@ protected:
 class Seek : public ISteeringBehavior
 {
 public:
-	Seek() = default;
-	virtual ~Seek() override = default;
-
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
 };
 
 class Flee : public ISteeringBehavior
 {
 public:
-	Flee() = default;
-	virtual ~Flee() override = default;
-
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
 };
 
 class Arrive : public ISteeringBehavior
 {
 public:
-	Arrive() = default;
-	virtual ~Arrive() override = default;
-
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
 
 	void SetSlowRadius(float InRadius) { SlowRadius = InRadius; }
@@ -63,8 +54,23 @@ private:
 class Face : public ISteeringBehavior
 {
 public:
-	Face() = default;
-	virtual ~Face() override = default;
+	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
+};
 
+class TargetingBehavior : public ISteeringBehavior
+{
+protected:
+	FVector2D PredictTargetPosition(const ASteeringAgent& Agent, const FTargetData& InTarget) const;
+};
+
+class Pursuit : public TargetingBehavior
+{
+public:
+	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
+};
+
+class Evade : public TargetingBehavior
+{
+public:
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
 };
