@@ -264,6 +264,14 @@ SteeringOutput Pursuit::CalculateSteering(float DeltaTime, ASteeringAgent& Agent
 SteeringOutput Evade::CalculateSteering(float DeltaTime, ASteeringAgent& Agent)
 {
 	SteeringOutput Output{};
+
+	const float DistToTarget = FVector2D::Distance(Agent.GetPosition(), Target.Position);
+	if (DistToTarget > EvadeRadius)
+	{
+		Output.IsValid = false;
+		return Output;
+	}
+
 	const FVector2D PredictedPosition{ PredictTargetPosition(Agent, Target) };
 	const FVector2D DirectionFromPrediction{ Agent.GetPosition() - PredictedPosition };
 

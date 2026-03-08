@@ -73,6 +73,10 @@ class Evade : public TargetingBehavior
 {
 public:
 	virtual SteeringOutput CalculateSteering(float DeltaTime, ASteeringAgent& Agent) override;
+	void SetEvadeRadius(float InRadius) { EvadeRadius = InRadius; }
+
+private:
+	float EvadeRadius{ 300.f };
 };
 
 class Wander : public Seek
